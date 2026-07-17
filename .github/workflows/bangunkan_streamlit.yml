@@ -1,0 +1,58 @@
+name: Pinger Penyelamat Streamlit 24 Jam
+
+on:
+  schedule:
+    # Berjalan otomatis setiap 30 minut (Menggunakan standar waktu UTC)
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Memungkinkan kamu mengetes tombol ini secara manual
+
+jobs:
+  wake-up-app:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Mempersiapkan Kode
+      uses: actions/checkout@v4
+
+    - name: Menginstal Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Menginstal Browser Otomatis (Playwright)
+      run: |
+        pip install playwright
+        playwright install chromium
+
+    - name: Menjalankan Patroli dan Klik Tombol Wake Up
+      run: |
+        python - <<EOF
+        from playwright.sync_api import sync_playwright
+        import time
+
+        # ==================================================
+        # GANTI URL DI BAWAH INI DENGAN LINK STREAMLIT-MU!
+        # ==================================================
+        URL_STREAMLIT = "https://tas-ai-iot-132023701.streamlit.app/"
+
+        with sync_playwright() as p:
+            print("Membuka browser virtual untuk memantau Streamlit...")
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            
+            # Membuka halaman dashboard Streamlit
+            page.goto(URL_STREAMLIT)
+            page.wait_for_timeout(5000) # Tunggu 5 detik sampai halaman termuat
+            
+            # Mencari apakah ada tombol "Yes, wake this app up" di layar
+            tombol_bangun = page.locator("text=Yes, wake this app up")
+            
+            if tombol_bangun.count() > 0:
+                print("🚨 Server Tertidur! Mencoba mengklik tombol Wake Up...")
+                tombol_bangun.click()
+                print("✅ Tombol berhasil diklik. Menunggu server melakukan booting...")
+                page.wait_for_timeout(20000) # Tunggu 20 detik proses bangun
+            else:
+                print("🟢 Server Aman! Dashboard terpantau sudah dalam kondisi aktif bekerja.")
+                
+            browser.close()
+        EOF
