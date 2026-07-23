@@ -1,3 +1,7 @@
 streamlit
 paho-mqtt
 requests
+pandas
+numpy
+matplotlib
+seaborn
