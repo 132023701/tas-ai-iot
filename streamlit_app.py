@@ -94,7 +94,8 @@ def start_mqtt_listener(web_app_url):
             elif "kelembaban" in topic:
                 shared_data["kelembaban"] = value
             
-            shared_data["last_update"] = datetime.now().strftime("%d-%m-%Y %H:%M:%S WIB")
+            # FITUR BARU: Konversi Waktu Server UTC ke WIB (+7 Jam)
+            shared_data["last_update"] = (datetime.now() + timedelta(hours=7)).strftime("%d-%m-%Y %H:%M:%S WIB")
             
             # PEREKAMAN AKTIF: Meneruskan data ke Google Sheets via GAS (doGet)
             now = time.time()
