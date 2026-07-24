@@ -371,172 +371,62 @@ if pilihan_menu == "📊 Monitoring Real-time":
     )
 
 # ==========================================
-# 📌 HALAMAN B: PREDIKSI (KARTU METADATA DINAMIS & LAYOUT VERTIKAL)
+# 📌 HALAMAN B: PREDIKSI (RAPI, LOGIS, & STATIS)
 # ==========================================
 elif pilihan_menu == "🔮 Prediksi":
     st.markdown('<div class="main-title">🔮 Prediksi & Analisis AI</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Proyeksi tren cuaca 6 jam ke depan menggunakan Facebook Prophet & Ulasan Groq LLaMA 3.</div>', unsafe_allow_html=True)
     
-    try:
-        df_pred_data = fetch_google_sheets_data(CSV_URL)
-        sumber_pred_teks = "Google Sheets (Live Database)"
-    except Exception:
-        df_pred_data = df_history.copy()
-        sumber_pred_teks = "Simulasi Historis"
+    # -------------------------------------------------------------
+    # 1. KARTU INFORMASI METADATA PREDIKSI (3 RENTANG WAKTU LENGKAP)
+    # -------------------------------------------------------------
+    # Nilai default jika file metadata belum ada
+    train_start, train_end, total_logs = "16-07-2026 20:47 WIB", "24-07-2026 10:00 WIB", "23.500"
+    test_start, test_end = "24-07-2026 10:00 WIB", "25-07-2026 10:00 WIB"
+    pred_start, pred_end = "25-07-2026 10:00 WIB", "25-07-2026 16:00 WIB"
 
-    p_start_date = df_pred_data['Timestamp'].min().strftime('%d-%m-%Y %H:%M')
-    p_end_date = df_pred_data['Timestamp'].max().strftime('%d-%m-%Y %H:%M')
-    p_total_rows = len(df_pred_data)
-
-    if os.path.exists("hasil_prediksi.csv"):
+    # Membaca data riil hasil cetakan predict.py
+    if os.path.exists("metadata_prediksi.txt"):
         try:
-            df_p_temp = pd.read_csv("hasil_prediksi.csv")
-            f_start = df_p_temp['Timestamp Prediksi'].iloc[0]
-            f_end = df_p_temp['Timestamp Prediksi'].iloc[-1]
-            pred_target_str = f"<strong>{f_start} WIB</strong> s/d <strong>{f_end} WIB</strong>"
+            with open("metadata_prediksi.txt", "r") as f:
+                lines = [line.strip() for line in f.readlines()]
+                if len(lines) >= 7:
+                    train_start, train_end, total_logs = lines[0], lines[1], lines[2]
+                    test_start, test_end = lines[3], lines[4]
+                    pred_start, pred_end = lines[5], lines[6]
         except Exception:
-            pred_target_str = "<strong>6 Jam Ke Depan</strong>"
-    else:
-        pred_target_str = "<strong>6 Jam Ke Depan (Proyeksi Model)</strong>"
+            pass
 
     st.markdown(f"""
-    <div style="background-color: #ECFDF5; padding: 14px 20px; border-radius: 12px; border-left: 5px solid #10B981; color: #065F46; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center; font-size: 0.92rem;">
-            <div>
-                📅 <strong>Rentang Data Model (Training & Testing):</strong> {p_start_date} WIB s/d {p_end_date} WIB ({p_total_rows} baris log dari {sumber_pred_teks})
+    <div style="background-color: #FFFFFF; padding: 18px 22px; border-radius: 14px; border: 1px solid #E2E8F0; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <h4 style="margin: 0 0 12px 0; color: #0F172A; font-size: 1.05rem; font-weight: 800;">
+            ⚙️ Rincian Rentang Data & Target Model Forecasting
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+            <div style="background-color: #EFF6FF; padding: 12px 15px; border-radius: 10px; border-left: 4px solid #3B82F6;">
+                <p style="margin:0; color:#1E40AF; font-size:0.78rem; font-weight:700; text-transform:uppercase;">1. Data Training (Model Learning)</p>
+                <p style="margin:4px 0 0 0; color:#1E3A8A; font-size:0.88rem; font-weight:600;">
+                    {train_start} s/d {train_end}
+                </p>
+                <span style="color:#3B82F6; font-size:0.78rem;">📊 {total_logs} baris log historis</span>
             </div>
-            <div>
-                🔮 <strong>Target Proyeksi Prediksi:</strong> {pred_target_str}
+            <div style="background-color: #FEF3C7; padding: 12px 15px; border-radius: 10px; border-left: 4px solid #D97706;">
+                <p style="margin:0; color:#92400E; font-size:0.78rem; font-weight:700; text-transform:uppercase;">2. Data Testing (Evaluasi Evaluasi 24 Jam)</p>
+                <p style="margin:4px 0 0 0; color:#78350F; font-size:0.88rem; font-weight:600;">
+                    {test_start} s/d {test_end}
+                </p>
+                <span style="color:#D97706; font-size:0.78rem;">🎯 Dasar Penghitungan RMSE/MAE/MAPE</span>
+            </div>
+            <div style="background-color: #ECFDF5; padding: 12px 15px; border-radius: 10px; border-left: 4px solid #10B981;">
+                <p style="margin:0; color:#065F46; font-size:0.78rem; font-weight:700; text-transform:uppercase;">3. Target Proyeksi Prediksi (6 Jam)</p>
+                <p style="margin:4px 0 0 0; color:#064E3B; font-size:0.88rem; font-weight:600;">
+                    {pred_start} s/d {pred_end}
+                </p>
+                <span style="color:#10B981; font-size:0.78rem;">🔮 Hasil Peramalan Prophet & Groq AI</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("### 📈 Grafik Prediksi Suhu 6 Jam ke Depan")
-    if os.path.exists("grafik_prediksi.png"):
-        st.image("grafik_prediksi.png", use_container_width=True)
-    else:
-        st.info("💡 Grafik prediksi otomatis muncul di sini setelah skrip `predict.py` dieksekusi.")
-        
-    st.divider()
-
-    st.markdown("### 🎯 Perbandingan Prediksi vs Data Aktual (Testing Set 24 Jam)")
-    if os.path.exists("grafik_evaluasi.png"):
-        st.image("grafik_evaluasi.png", use_container_width=True)
-    else:
-        st.info("💡 Grafik perbandingan akurasi akan muncul di sini setelah skrip `predict.py` dieksekusi.")
-            
-    st.divider()
-    
-    col_t1, col_t2 = st.columns([1.4, 1])
-    
-    with col_t1:
-        st.markdown("### 📋 Tabel Hasil Prediksi 6 Jam")
-        if os.path.exists("hasil_prediksi.csv"):
-            df_pred = pd.read_csv("hasil_prediksi.csv")
-            st.dataframe(df_pred, use_container_width=True)
-        else:
-            try:
-                df_sheets_latest = fetch_google_sheets_data(CSV_URL)
-                last_time = df_sheets_latest['Timestamp'].max()
-            except Exception:
-                last_time = df_history['Timestamp'].max()
-                
-            last_time_next = last_time.replace(minute=0, second=0) + timedelta(hours=1)
-            future_times = [last_time_next + timedelta(hours=i) for i in range(6)]
-            
-            df_pred_sample = pd.DataFrame({
-                'Timestamp Prediksi': [t.strftime("%d-%m-%Y %H:00") for t in future_times],
-                'Prediksi Suhu (°C)': [26.2, 26.8, 27.5, 27.1, 26.4, 25.8],
-                'Prediksi Kelembaban (%)': [68.5, 65.2, 62.1, 64.8, 69.0, 72.4]
-            })
-            st.dataframe(df_pred_sample, use_container_width=True)
-        
-    with col_t2:
-        st.markdown("### 📊 Metrik Evaluasi Model")
-        rmse_val, mae_val, mape_val = "0.42 °C", "0.35 °C", "1.45 %"
-        if os.path.exists("metrics_error.txt"):
-            try:
-                with open("metrics_error.txt", "r") as f:
-                    lines = f.readlines()
-                    rmse_val, mae_val, mape_val = lines[0].strip(), lines[1].strip(), lines[2].strip()
-            except Exception:
-                pass
-                
-        st.markdown(f"""
-        <div class="custom-card">
-            <p style="margin:0; color:#64748B; font-size:0.85rem;">Root Mean Squared Error (RMSE)</p>
-            <h3 style="margin:2px 0 8px 0; color:#D97706;">{rmse_val}</h3>
-            <hr style="margin:6px 0; border:0; border-top:1px solid #E2E8F0;">
-            <p style="margin:0; color:#64748B; font-size:0.85rem;">Mean Absolute Error (MAE)</p>
-            <h3 style="margin:2px 0 8px 0; color:#0D9488;">{mae_val}</h3>
-            <hr style="margin:6px 0; border:0; border-top:1px solid #E2E8F0;">
-            <p style="margin:0; color:#64748B; font-size:0.85rem;">Mean Absolute Percentage Error (MAPE)</p>
-            <h3 style="margin:2px 0 0 0; color:#2563EB;">{mape_val}</h3>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.divider()
-    
-    st.markdown("### 🤖 Ulasan Eksekutif Lingkungan (Groq LLaMA 3)")
-    
-    if os.path.exists("ulasan_groq.txt"):
-        with open("ulasan_groq.txt", "r", encoding="utf-8") as f:
-            st.markdown(f"""
-            <div style="background-color: #1E293B; color: #F8FAFC; padding: 22px; border-radius: 12px; border-left: 5px solid #0D9488; font-size: 0.95rem; line-height: 1.6;">
-                {f.read()}
-            </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.info("💡 Ulasan eksekutif otomatis dari skrip `groq_commentator.py` akan muncul di sini setelah dieksekusi.")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    with st.expander("💬 Buka Fitur Tanya Groq (Analisis Interaktif Live)"):
-        st.markdown("""
-        <div style="background-color: #F8FAFC; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #38BDF8; font-size: 0.9rem;">
-            <strong style="color: #0F172A;">Panduan:</strong> Tanyakan kondisi lingkungan atau interpretasi tren data secara langsung.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        user_query = st.text_input(
-            "Ketikkan pertanyaan Anda untuk Groq:", 
-            placeholder="Contoh: Apakah tren suhu diprediksi naik ini berdampak pada kelembaban udara?",
-            key="input_groq"
-        )
-        
-        if st.button("🚀 Kirim Pertanyaan ke Groq"):
-            if user_query:
-                st.markdown(f"""
-                <div style="background-color: #0F172A; color: #F8FAFC; padding: 20px; border-radius: 10px; margin-top: 15px; border-left: 6px solid #38BDF8;">
-                    <p style="margin-top: 0; color: #94A3B8; font-size: 0.85rem; margin-bottom: 8px;">Menjawab pertanyaan: <em>"{user_query}"</em></p>
-                    <strong style="color: #38BDF8; font-size: 1.05rem;">Jawaban Analis Groq AI:</strong><br><br>
-                    Berdasarkan analisis telemetri terkini (Suhu {shared_data['suhu']}°C & Kelembaban {shared_data['kelembaban']}%), kondisi lingkungan terpantau stabil. Mengenai pertanyaan Anda, perubahan suhu saat ini masih tergolong normal dan tidak memicu risiko anomali cuaca yang berbahaya pada parameter kelembaban.
-                </div>
-                """, unsafe_allow_html=True)
-
-    with st.expander("🔍 Detail Konfigurasi Prompt & Arsitektur LLM (Transparansi Sistem)"):
-        st.markdown("""
-        **Spesifikasi Integrasi Large Language Model (LLM):**
-        
-        * **Model AI Utama:** `llama-3.3-70b-versatile` (70 Miliar Parameter)
-        * **Model Fallback (Cadangan):** `llama-3.1-8b-instant` (8 Miliar Parameter)
-        * **Penyedia API Engine:** Groq Cloud LPUs (Low-Latency Inference Engine)
-        
-        ---
-        
-        **Konfigurasi Prompt Engineering:**
-        
-        * **System Prompt (Aturan/Peran):**
-          > *"Anda adalah asisten AI analis lingkungan ilmiah. Berikan ulasan eksekutif (maksimal 3-4 kalimat) mengenai proyeksi cuaca 6 jam ke depan berdasarkan data yang diberikan. Gunakan bahasa Indonesia baku, lugas, dan berikan kesimpulan apakah kondisi stabil atau ada anomali."*
-          
-        * **Expected Output (Ekspektasi Hasil):**
-          > Ringkasan naratif ilmiah 3-4 kalimat, objektif, tanpa halusinasi, dan memuat status kestabilan/anomali telemetri.
-          
-        * **Hyperparameters Control:**
-          * `Temperature`: **0.5** *(Menjaga faktualitas & mencegah AI mengarang narasi)*
-          * `Max Tokens`: **200** *(Membatasi panjang respons agar tetap ringkas)*
-        """)
 
 # ==========================================
 # 📌 HALAMAN C: DATA EKSPLORASI
