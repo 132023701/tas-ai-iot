@@ -66,11 +66,11 @@ Eksekusi pemrosesan AI berat dilakukan secara mandiri di laptop (.venv) pada Sab
    * Pelatihan Facebook Prophet: Melatih model peramalan deret waktu untuk parameter Suhu Udara, serta melatih model Kelembaban Udara dengan menggunakan Suhu sebagai extra regressor.
    * Evaluasi Performa Model: Menghitung metrik kesalahan uji (testing set 24 jam) meliputi RMSE, MAE, dan MAPE.
    * Ekspor 5 Aset Luaran AI:
-     ** grafik_prediksi.png (Visualisasi proyeksi suhu 6 jam ke depan).
-     ** grafik_evaluasi.png (Visualisasi perbandingan data Aktual vs Prediksi Prophet 24 jam).
-     ** hasil_prediksi.csv (Tabel angka hasil peramalan 6 jam ke depan).
-     ** metrics_error.txt (Berkas teks berisi nilai RMSE, MAE, MAPE).
-     ** metadata_prediksi.txt (Rincian rentang waktu training, testing, dan prediksi).
+     1) grafik_prediksi.png (Visualisasi proyeksi suhu 6 jam ke depan).
+     2) grafik_evaluasi.png (Visualisasi perbandingan data Aktual vs Prediksi Prophet 24 jam).
+     3) hasil_prediksi.csv (Tabel angka hasil peramalan 6 jam ke depan).
+     4) metrics_error.txt (Berkas teks berisi nilai RMSE, MAE, MAPE).
+     5) metadata_prediksi.txt (Rincian rentang waktu training, testing, dan prediksi).
    
 
 2. Eksekusi Analis Eksekutif LLM (python groq_commentator.py):
