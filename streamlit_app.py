@@ -695,7 +695,7 @@ st.markdown("""
 <div style="background-color: #0F172A; color: #F8FAFC; border-radius: 12px; padding: 14px 22px; margin-top: 40px; font-size: 0.82rem; font-family: 'Inter', sans-serif;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div>
-            <strong style="color: #F59E0B;">Yohanes Yoga D. S.</strong> (NIM: 132023701) | 
+            <strong style="color: #F59E0B;">D. S.</strong> (NIM: *****) | 
             <span style="color: #CBD5E1;">Tugas Akhir Kelas AI (BD002) Sem. Genap 2025/2026</span>
         </div>
         <div style="color: #94A3B8; font-weight: 600;">
