@@ -11,8 +11,8 @@ Dokumentasi dan repositori kode resmi untuk **Tugas Akhir Mata Kuliah Artificial
 
 ## 📌 Metadata Mahasiswa & Proyek
 
-* **Nama Mahasiswa** : Yohanes Yoga D. S.
-* **NIM** : 132023701
+* **Nama Mahasiswa** : Y. D. S.
+* **NIM** : ...
 * **Institusi** : Universitas Kristen Satya Wacana (UKSW)
 * **Mata Kuliah** : AI (BD002) - Semester Genap 2025/2026
 * **Dosen Pengampu TAS** : Dr. Suryasatriya Trihandaru, M.Sc.nat,
@@ -127,4 +127,4 @@ tas-ai-iot/
 
 ---
 
-© 2026 Yohanes Yoga D. S. — Universitas Kristen Satya Wacana (UKSW)
+© 2026 Y. D. S. — Universitas Kristen Satya Wacana (UKSW)
