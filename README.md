@@ -9,15 +9,7 @@ Dokumentasi dan repositori kode resmi untuk **Tugas Akhir Mata Kuliah Artificial
 
 ---
 
-## 📌 Metadata Mahasiswa & Proyek
-
-* **Nama Mahasiswa** : Y. D. S.
-* **NIM** : ...
-* **Institusi** : Universitas Kristen Satya Wacana (UKSW)
-* **Mata Kuliah** : AI (BD002) - Semester Genap 2025/2026
-* **Dosen Pengampu TAS** : Dr. Suryasatriya Trihandaru, M.Sc.nat,
-* **Dosen Pengampu Lain (Kelas AI)** : Dr. Bambang Susanto, MS., Prof. Dr. Hanna Arini Parhusip, MSc.nat, Denny Indrajaya, Prof. Dr. Ir. Eko Sediyono, M.Kom.
-* **Tenggat Pengumpulan** : Sabtu, 25 Juli 2026 (23:59 WIB)
+## 📌 Metadata Proyek
 * **Repositori Git** : https://github.com/132023701/tas-ai-iot
 * **Tautan Dashboard Live** : https://tas-ai-iot-132023701.streamlit.app/
 
